@@ -66,3 +66,20 @@ components:
           format: date-time
           description: Date modified
           readOnly: true
+
+    Survey:
+      type: object
+      description: Survey object
+      required:
+        - title
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of survey
+          readOnly: true
+        title:
+          type: string
+          description: Name of survey
+        metadata:
+          $ref: '#/components/schemas/Metadata'
