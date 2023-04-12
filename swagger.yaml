@@ -276,11 +276,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/fleet/devices/{serialNumber}:
-    get:
-      operationId: getDeviceKey
-      summary: Gets device key
-      description: Finds a Device key by serial number.
+  /v1/fleet/devices/requests/{serialNumber}:
+    post:
+      operationId: createDevice
+      summary: Creates a Device
+      description: Creates a device.
       tags:
         - Devices
       parameters:
@@ -291,12 +291,40 @@ paths:
           schema:
             type: string
       responses:
+        "201":
+          description: Created Device Request
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/DeviceRequest"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+  /v1/fleet/devices/requests/{requestId}:
+    put:
+      operationId: getDeviceKey
+      summary: Gets device key
+      description: Gets device key if device is approved.
+      tags:
+        - Devices
+      parameters:
+        - name: requestId
+          required: true
+          in: path
+          description: Device Request id
+          schema:
+            type: string
+      responses:
         "200":
           description: Device key
           content:
             text/plain:
               schema:
-                type: string
+                $ref: "#/components/schemas/DeviceRequest"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -387,11 +415,25 @@ components:
         location:
           type: string
           description: Location of Device
-        approvalStatus:
-          $ref: "#/components/schemas/DeviceApprovalStatus"
         deviceStatus:
           $ref: "#/components/schemas/DeviceStatus"
         metadata:
+          $ref: "#/components/schemas/Metadata"
+   
+    DeviceRequest:
+      type: object
+      description: Device Request object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of Device Request
+        serialNumber:
+          type: string
+          description: Serial Number of Device requesting approval
+        approvalStatus:
+          $ref: "#/components/schemas/DeviceApprovalStatus"
+        Metadata:
           $ref: "#/components/schemas/Metadata"
     
     DeviceApprovalStatus:
