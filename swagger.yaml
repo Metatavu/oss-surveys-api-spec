@@ -278,9 +278,9 @@ paths:
 
   /v1/fleet/devices/requests/{serialNumber}:
     post:
-      operationId: createDevice
-      summary: Creates a Device
-      description: Creates a device.
+      operationId: createDeviceRequest
+      summary: Creates a Device Request
+      description: Creates a Device Request.
       tags:
         - Devices
       parameters:
