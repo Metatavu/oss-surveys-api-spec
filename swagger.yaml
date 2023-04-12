@@ -318,6 +318,7 @@ paths:
           description: Device Request id
           schema:
             type: string
+            format: uuid
       responses:
         "200":
           description: Device key
