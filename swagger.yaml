@@ -294,7 +294,7 @@ paths:
         "201":
           description: Created Device Request
           content:
-            text/plain:
+            application/json:
               schema:
                 $ref: "#/components/schemas/DeviceRequest"
         "default":
