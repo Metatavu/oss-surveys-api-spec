@@ -325,7 +325,7 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: "#/components/schemas/DeviceRequest"
+                type: string
         "default":
           description: Invalid request was sent to the server
           content:
