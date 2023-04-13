@@ -268,7 +268,7 @@ paths:
       summary: Deletes Device Request
       description: Deletes Device Request
       tags:
-        - Devices
+        - DeviceRequests
       parameters:
         - name: requestId
           required: true
