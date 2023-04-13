@@ -201,6 +201,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /v1/fleet/devices/requests/{serialNumber}/key:
     put:
       operationId: getDeviceKey
       summary: Gets device key
