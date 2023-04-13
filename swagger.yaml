@@ -312,6 +312,7 @@ paths:
                 properties:
                   key: 
                     type: string
+                    required: true
         "default":
           description: Invalid request was sent to the server
           content:
