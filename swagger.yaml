@@ -201,34 +201,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
-  /v1/fleet/devices/requests/{serialNumber}/key:
-    put:
-      operationId: getDeviceKey
-      summary: Gets device key
-      description: Gets device key if device is approved.
-      tags:
-        - Devices
-      parameters:
-        - name: serialNumber
-          required: true
-          in: path
-          description: Device serial number
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Device key
-          content:
-            text/plain:
-              schema:
-                type: string
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
                 
   /v1/fleet/devices/requests/{requestId}:
     put:
@@ -259,6 +231,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeviceRequest"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/fleet/devices/requests/{requestId}/key:
+    put:
+      operationId: getDeviceKey
+      summary: Gets device key
+      description: Gets device key if device is approved.
+      tags:
+        - Devices
+      parameters:
+        - name: requestId
+          required: true
+          in: path
+          description: Device Request id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Device key
+          content:
+            text/plain:
+              schema:
+                type: string
         "default":
           description: Invalid request was sent to the server
           content:
