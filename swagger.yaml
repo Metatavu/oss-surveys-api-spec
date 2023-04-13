@@ -309,12 +309,6 @@ paths:
             text/plain:
               schema:
                 type: string
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 
 components:
   
