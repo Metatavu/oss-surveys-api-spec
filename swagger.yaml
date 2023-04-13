@@ -425,6 +425,8 @@ components:
     DeviceKey:
       type: object
       description: Device key object
+      required:
+        - key
       properties:
         key:
           type: string
