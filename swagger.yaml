@@ -179,8 +179,6 @@ paths:
       operationId: listDevices
       summary: List devices
       description: Lists devices.
-      security:
-        - deviceAuth: []
       tags:
         - Devices
       parameters:
@@ -342,11 +340,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  
-    deviceAuth:
-      type: apiKey
-      in: header
-      name: X-DEVICE-KEY
       
   schemas:
     Error:
