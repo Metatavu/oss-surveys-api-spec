@@ -206,7 +206,7 @@ paths:
       summary: Creates a Device Request
       description: Creates a Device Request.
       tags:
-        - Devices
+        - DeviceRequests
       parameters:
         - name: serialNumber
           required: true
@@ -234,7 +234,7 @@ paths:
       summary: Updates Device Request
       description: Updates Device Request.
       tags:
-        - Devices
+        - DeviceRequests
       parameters:
         - name: requestId
           required: true
@@ -293,7 +293,7 @@ paths:
       summary: Gets device key
       description: Gets device key if device is approved.
       tags:
-        - Devices
+        - DeviceRequests
       parameters:
         - name: requestId
           required: true
