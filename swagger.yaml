@@ -40,6 +40,11 @@ paths:
           description: Max results. Defaults to 10
           schema:
             type: integer
+        - name: status
+          in: query
+          description: Filter Surveys by status
+          schema:
+            $ref: "#/components/schemas/SurveyStatus"
       responses:
         "200":
           description: List of Surveys
@@ -377,6 +382,8 @@ components:
         title:
           type: string
           description: Name of survey
+        status:
+          $ref: "#/components/schemas/SurveyStatus"
         metadata:
           $ref: "#/components/schemas/Metadata"
           
@@ -443,3 +450,9 @@ components:
       enum:
         - ONLINE
         - OFFLINE
+
+    SurveyStatus:
+      type: string
+      enum:
+        - DRAFT
+        - APPROVED
