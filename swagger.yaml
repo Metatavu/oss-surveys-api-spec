@@ -730,3 +730,39 @@ components:
       enum:
         - PUBLISHED
         - SCHEDULED
+
+    DeviceSurveyMessage:
+      type: object
+      description: |
+        Device Survey Message object
+        
+        Corresponding action is interpreted from the topic this message is sent to"
+      required:
+        - surveyId
+        - deviceId
+      properties:
+        surveyId:
+          type: string
+          format: uuid
+          description: ID of Survey
+        deviceId:
+          type: string
+          format: uuid
+          description: ID of Device
+
+    DeviceStatusMessage:
+      type: object
+      description: |
+        Device Status Message object
+        
+        Devices send this regularly to indicate their status"
+      required:
+          - deviceId
+          - status
+      properties:
+          deviceId:
+              type: string
+              format: uuid
+              description: ID of Device
+          status:
+              $ref: "#/components/schemas/DeviceStatus"
