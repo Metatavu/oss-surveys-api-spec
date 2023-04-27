@@ -365,7 +365,7 @@ paths:
     get:
       operationId: listDeviceSurveys
       summary: Lists Device Surveys
-      description: Lists Device Surveys. Devices access this endpoint.
+      description: Lists Device Surveys.
       tags:
         - DeviceSurveys
       parameters:
@@ -386,12 +386,6 @@ paths:
           description: Max results. Defaults to 10
           schema:
             type: integer
-        - name: X-DEVICE-KEY
-          required: true
-          in: header
-          description: Device key
-          schema:
-            type: string
       responses:
         "200":
           description: List of Device Surveys
@@ -452,9 +446,11 @@ paths:
     get:
       operationId: findDeviceSurvey
       summary: Find a Device Survey.
-      description: Finds a Device Survey by id.
+      description: Finds a Device Survey by id. Devices access this endpoint.
       tags:
         - DeviceSurveys
+      security:
+        - deviceAuth: []
       parameters:
         - name: deviceId
           required: true
@@ -562,6 +558,11 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+    deviceAuth:
+      type: apiKey
+      in: header
+      name: X-DEVICE-KEY
 
   schemas:
     Error:
