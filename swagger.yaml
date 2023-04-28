@@ -221,6 +221,33 @@ paths:
 
 
   /v1/fleet/devices/{deviceId}:
+    get:
+      operationId: findDevice
+      summary: Find a Device.
+      description: Finds a Device by id.
+      tags:
+          - Devices
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Device
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       operationId: deleteDevice
       summary: Deletes Device
@@ -739,17 +766,20 @@ components:
         
         Corresponding action is interpreted from the topic this message is sent to"
       required:
-        - surveyId
+        - deviceSurveyId
         - deviceId
+        - action
       properties:
-        surveyId:
+        deviceSurveyId:
           type: string
           format: uuid
-          description: ID of Survey
+          description: ID of Device Survey
         deviceId:
           type: string
           format: uuid
           description: ID of Device
+        action:
+          $ref: "#/components/schemas/DeviceSurveysMessageAction"
 
     DeviceStatusMessage:
       type: object
@@ -767,3 +797,10 @@ components:
               description: ID of Device
           status:
               $ref: "#/components/schemas/DeviceStatus"
+
+    DeviceSurveysMessageAction:
+      type: string
+      enum:
+        - CREATE
+        - UPDATE
+        - DELETE
