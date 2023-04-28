@@ -413,6 +413,11 @@ paths:
           description: Max results. Defaults to 10
           schema:
             type: integer
+        - name: status
+          in: query
+          description: Status of DeviceSurvey
+          schema:
+            $ref: "#/components/schemas/DeviceSurveyStatus"
       responses:
         "200":
           description: List of Device Surveys
