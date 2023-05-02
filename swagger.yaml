@@ -617,6 +617,8 @@ components:
     Page:
       type: object
       description: Page object
+      required:
+        - title
       properties:
         title:
           type: string
@@ -632,6 +634,10 @@ components:
     PageProperty:
       type: object
       description: Page property object
+      required:
+        - key
+        - value
+        - type
       properties:
         key:
           type: string
@@ -639,3 +645,11 @@ components:
         value:
           type: string
           description: Value of property
+        type:
+          $ref: "#/components/schemas/PagePropertyType"
+
+    PagePropertyType:
+      type: string
+      enum:
+        - TEXT
+        - IMAGE_URL
