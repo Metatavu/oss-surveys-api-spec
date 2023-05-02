@@ -191,11 +191,19 @@ paths:
             format: uuid
       responses:
         "200":
-          description: Survey
+          description: List of pages
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Page"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Page"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of pages
         "default":
           description: Invalid request was sent to the server
           content:
@@ -225,7 +233,7 @@ paths:
             format: uuid
       responses:
         "200":
-          description: Updated Survey
+          description: created Page
           content:
             application/json:
               schema:
@@ -261,7 +269,7 @@ paths:
             format: uuid
       responses:
         "200":
-          description: Survey
+          description: found page
           content:
             application/json:
               schema:
@@ -302,7 +310,7 @@ paths:
             format: uuid
       responses:
         "200":
-          description: Updated Survey
+          description: Updated Page
           content:
             application/json:
               schema:
@@ -619,10 +627,14 @@ components:
       description: Page object
       required:
         - title
+        - html
       properties:
         title:
           type: string
           description: Title of page
+        html:
+          type: string
+          description: HTML of page
         properties:
           type: array
           description: Page properties
