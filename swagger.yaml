@@ -640,6 +640,7 @@ components:
       description: Survey object
       required:
         - title
+        - status
       properties:
         id:
           type: string
