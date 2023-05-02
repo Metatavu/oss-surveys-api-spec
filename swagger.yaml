@@ -40,6 +40,11 @@ paths:
           description: Max results. Defaults to 10
           schema:
             type: integer
+        - name: status
+          in: query
+          description: Filter Surveys by status
+          schema:
+            $ref: "#/components/schemas/SurveyStatus"
       responses:
         "200":
           description: List of Surveys
@@ -161,184 +166,6 @@ paths:
           required: true
           in: path
           description: Survey id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Success
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /v1/surveys/{surveyId}/pages:
-    get:
-      operationId: listSurveyPages
-      summary: Lists all pages of a survey
-      description: Lists all pages of a survey
-      tags:
-        - Pages
-      parameters:
-        - name: surveyId
-          required: true
-          in: path
-          description: Survey id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: List of pages
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Page"
-          headers:
-            X-Total-Count:
-              schema:
-                type: integer
-                format: int64
-              description: Total count of pages
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    post:
-      operationId: createSurveyPage
-      summary: Creates a page for the survey
-      description: Creates a page for the survey
-      tags:
-        - Pages
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Page"
-        description: Payload
-        required: true
-      parameters:
-        - name: surveyId
-          required: true
-          in: path
-          description: Survey id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: created Page
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Page"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /v1/surveys/{surveyId}/pages/{pageId}:
-    get:
-      operationId: findSurveyPage
-      summary: Finds survey page by id
-      description: Finds survey page by id
-      tags:
-        - Pages
-      parameters:
-        - name: surveyId
-          required: true
-          in: path
-          description: Survey id
-          schema:
-            type: string
-            format: uuid
-        - name: pageId
-          required: true
-          in: path
-          description: Page id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: found page
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Page"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    put:
-      operationId: updateSurveyPage
-      summary: Updates a page
-      description: Updates a page
-      tags:
-        - Pages
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Page"
-        description: Payload
-        required: true
-      parameters:
-        - name: surveyId
-          required: true
-          in: path
-          description: Survey id
-          schema:
-            type: string
-            format: uuid
-        - name: pageId
-          required: true
-          in: path
-          description: Page id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: Updated Page
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Page"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      operationId: deleteSurveyPage
-      summary: Delete a Survey page.
-      description: Deletes a Survey page.
-      tags:
-        - Pages
-      parameters:
-        - name: surveyId
-          required: true
-          in: path
-          description: Survey id
-          schema:
-            type: string
-            format: uuid
-        - name: pageId
-          required: true
-          in: path
-          description: Page id
           schema:
             type: string
             format: uuid
@@ -546,6 +373,7 @@ components:
       description: Survey object
       required:
         - title
+        - status
       properties:
         id:
           type: string
@@ -555,6 +383,8 @@ components:
         title:
           type: string
           description: Name of survey
+        status:
+          $ref: "#/components/schemas/SurveyStatus"
         metadata:
           $ref: "#/components/schemas/Metadata"
           
@@ -621,6 +451,12 @@ components:
       enum:
         - ONLINE
         - OFFLINE
+
+    SurveyStatus:
+      type: string
+      enum:
+        - DRAFT
+        - APPROVED
 
     Page:
       type: object
