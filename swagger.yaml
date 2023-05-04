@@ -1070,6 +1070,9 @@ components:
           type: string
           format: uuid
           description: ID of page
+        orderNumber:
+          type: integer
+          description: Order number of page
         title:
           type: string
           description: Title of page
