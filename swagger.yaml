@@ -357,6 +357,48 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+
+  /v1/fleet/devices:
+    get:
+      operationId: listDevices
+      summary: List devices.
+      description: Lists devices.
+      tags:
+        - Devices
+      parameters:
+        - name: firstResult
+          in: query
+          description: First result. Defaults to 0
+          schema:
+            type: integer
+        - name: maxResults
+          in: query
+          description: Max results. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of Devices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Device"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of Devices with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
   /v1/fleet/devices/{deviceId}:
     delete:
       operationId: deleteDevice
@@ -381,7 +423,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      
 
   /v1/fleet/devices/requests/{serialNumber}:
     post:
@@ -410,7 +451,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-                
+
   /v1/fleet/devices/requests/{requestId}:
     put:
       operationId: updateDeviceRequest
@@ -492,6 +533,196 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeviceKey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/devices/{deviceId}/surveys:
+    get:
+      operationId: listDeviceSurveys
+      summary: Lists Device Surveys
+      description: Lists Device Surveys.
+      tags:
+        - DeviceSurveys
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: firstResult
+          in: query
+          description: First result. Defaults to 0
+          schema:
+            type: integer
+        - name: maxResults
+          in: query
+          description: Max results. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of Device Surveys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceSurvey"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of Device Surveys with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createDeviceSurvey
+      summary: Create a Device Survey.
+      description: Creates a new DeviceSurvey.
+      tags:
+        - DeviceSurveys
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceSurvey"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created DeviceSurvey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSurvey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/devices/{deviceId}/surveys/{deviceSurveyId}:
+    get:
+      operationId: findDeviceSurvey
+      summary: Find a Device Survey.
+      description: Finds a Device Survey by id. Devices access this endpoint.
+      tags:
+        - DeviceSurveys
+      security:
+        - deviceAuth: []
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: Device Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Survey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSurvey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateDeviceSurvey
+      summary: Update a Device Survey.
+      description: Updates a Device Survey
+      tags:
+        - DeviceSurveys
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceSurvey"
+        description: Payload
+        required: true
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: Device Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Survey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSurvey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteDeviceSurvey
+      summary: Delete a Device Survey.
+      description: Deletes a Device Survey.
+      tags:
+        - DeviceSurveys
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: Device Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
         "default":
           description: Invalid request was sent to the server
           content:
@@ -653,13 +884,18 @@ paths:
 
 
 components:
-  
+
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      
+
+    deviceAuth:
+      type: apiKey
+      in: header
+      name: X-DEVICE-KEY
+
   schemas:
     Error:
       type: object
@@ -718,7 +954,7 @@ components:
           $ref: "#/components/schemas/SurveyStatus"
         metadata:
           $ref: "#/components/schemas/Metadata"
-          
+
     Device:
       type: object
       description: Device object
@@ -744,7 +980,7 @@ components:
           $ref: "#/components/schemas/DeviceStatus"
         metadata:
           $ref: "#/components/schemas/Metadata"
-   
+
     DeviceRequest:
       type: object
       description: Device Request object
@@ -770,7 +1006,41 @@ components:
         key:
           type: string
           description: Device Key
-    
+
+    DeviceSurvey:
+      type: object
+      description: Device Survey object
+      required:
+        - surveyId
+        - deviceId
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of Device Survey
+          readOnly: true
+        surveyId:
+          type: string
+          format: uuid
+          description: ID of Survey
+        deviceId:
+          type: string
+          format: uuid
+          description: ID of Device
+        status:
+          $ref: "#/components/schemas/DeviceSurveyStatus"
+        publishStartTime:
+          type: string
+          format: date-time
+          description: Publication start time
+        publishEndTime:
+          type: string
+          format: date-time
+          description: Publication end time
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
     DeviceApprovalStatus:
       type: string
       enum:
@@ -865,3 +1135,9 @@ components:
           description: HTML code of Layout
         metadata:
           $ref: "#/components/schemas/Metadata"
+
+    DeviceSurveyStatus:
+      type: string
+      enum:
+        - PUBLISHED
+        - SCHEDULED
