@@ -941,6 +941,7 @@ components:
       required:
         - title
         - status
+        - timeout
       properties:
         id:
           type: string
@@ -952,6 +953,13 @@ components:
           description: Name of survey
         status:
           $ref: "#/components/schemas/SurveyStatus"
+        description:
+          type: string
+          description: Description of survey
+        timeout:
+          type: integer
+          format: int32
+          description: Timeout of returning to home page in seconds
         metadata:
           $ref: "#/components/schemas/Metadata"
 
