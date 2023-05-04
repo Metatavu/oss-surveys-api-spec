@@ -178,7 +178,185 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-                
+
+  /v1/surveys/{surveyId}/pages:
+    get:
+      operationId: listSurveyPages
+      summary: Lists all pages of a survey
+      description: Lists all pages of a survey
+      tags:
+        - Pages
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of pages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Page"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of pages
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createSurveyPage
+      summary: Creates a page for the survey
+      description: Creates a page for the survey
+      tags:
+        - Pages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Page"
+        description: Payload
+        required: true
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: created Page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/surveys/{surveyId}/pages/{pageId}:
+    get:
+      operationId: findSurveyPage
+      summary: Finds survey page by id
+      description: Finds survey page by id
+      tags:
+        - Pages
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: found page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateSurveyPage
+      summary: Updates a page
+      description: Updates a page
+      tags:
+        - Pages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Page"
+        description: Payload
+        required: true
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteSurveyPage
+      summary: Delete a Survey page.
+      description: Deletes a Survey page.
+      tags:
+        - Pages
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/fleet/devices/{deviceId}:
     delete:
       operationId: deleteDevice
@@ -610,6 +788,54 @@ components:
       enum:
         - DRAFT
         - APPROVED
+
+    Page:
+      type: object
+      description: Page object
+      required:
+        - title
+        - html
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of page
+        title:
+          type: string
+          description: Title of page
+        html:
+          type: string
+          description: HTML of page
+        properties:
+          type: array
+          description: Page properties
+          items:
+            $ref: "#/components/schemas/PageProperty"
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    PageProperty:
+      type: object
+      description: Page property object
+      required:
+        - key
+        - value
+        - type
+      properties:
+        key:
+          type: string
+          description: Name of property
+        value:
+          type: string
+          description: Value of property
+        type:
+          $ref: "#/components/schemas/PagePropertyType"
+
+    PagePropertyType:
+      type: string
+      enum:
+        - TEXT
+        - IMAGE_URL
 
     Layout:
       type: object
