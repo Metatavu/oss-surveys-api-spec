@@ -806,6 +806,10 @@ components:
         html:
           type: string
           description: HTML of page
+        layoutId:
+          type: string
+          format: uuid
+          description: ID of layout
         properties:
           type: array
           description: Page properties
