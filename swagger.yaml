@@ -788,6 +788,7 @@ components:
       required:
         - title
         - status
+        - timeout
       properties:
         id:
           type: string
