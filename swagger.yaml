@@ -400,6 +400,33 @@ paths:
 
 
   /v1/fleet/devices/{deviceId}:
+    get:
+      operationId: findDevice
+      summary: Find a Device.
+      description: Finds a Device by id.
+      tags:
+          - Devices
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Device
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       operationId: deleteDevice
       summary: Deletes Device
@@ -565,6 +592,11 @@ paths:
           description: Max results. Defaults to 10
           schema:
             type: integer
+        - name: status
+          in: query
+          description: Status of DeviceSurvey
+          schema:
+            $ref: "#/components/schemas/DeviceSurveyStatus"
       responses:
         "200":
           description: List of Device Surveys
@@ -1154,3 +1186,49 @@ components:
       enum:
         - PUBLISHED
         - SCHEDULED
+
+    DeviceSurveyMessage:
+      type: object
+      description: |
+        Device Survey Message object
+        
+        Corresponding action is interpreted from the topic this message is sent to"
+      required:
+        - deviceSurveyId
+        - deviceId
+        - action
+      properties:
+        deviceSurveyId:
+          type: string
+          format: uuid
+          description: ID of Device Survey
+        deviceId:
+          type: string
+          format: uuid
+          description: ID of Device
+        action:
+          $ref: "#/components/schemas/DeviceSurveysMessageAction"
+
+    DeviceStatusMessage:
+      type: object
+      description: |
+        Device Status Message object
+        
+        Devices send this regularly to indicate their status"
+      required:
+          - deviceId
+          - status
+      properties:
+          deviceId:
+              type: string
+              format: uuid
+              description: ID of Device
+          status:
+              $ref: "#/components/schemas/DeviceStatus"
+
+    DeviceSurveysMessageAction:
+      type: string
+      enum:
+        - CREATE
+        - UPDATE
+        - DELETE
