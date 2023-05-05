@@ -1073,6 +1073,7 @@ components:
       required:
         - title
         - html
+        - orderNumber
       properties:
         id:
           type: string
