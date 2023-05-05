@@ -762,6 +762,159 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/layouts:
+    get:
+      operationId: listLayouts
+      summary: List layouts.
+      description: Lists layouts.
+      tags:
+        - Layouts
+      parameters:
+        - name: firstResult
+          in: query
+          description: First result. Defaults to 0
+          schema:
+            type: integer
+        - name: maxResults
+          in: query
+          description: Max results. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of layouts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Layout"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of layouts
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createLayout
+      summary: Create a layout
+      description: Creates a new layout
+      tags:
+        - Layouts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Layout"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Layout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Layout"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/layouts/{layoutId}:
+    get:
+      operationId: findLayout
+      summary: Find a layout.
+      description: Finds a layout by id.
+      tags:
+        - Layouts
+      parameters:
+        - name: layoutId
+          required: true
+          in: path
+          description: Layout id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Layout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Layout"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateLayout
+      summary: Update a Layout.
+      description: Updates a Layout
+      tags:
+        - Layouts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Layout"
+        description: new Layout data
+        required: true
+      parameters:
+        - name: layoutId
+          required: true
+          in: path
+          description: Layout id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Layout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Layout"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteLayout
+      summary: Delete a Layout.
+      description: Deletes a Layout.
+      tags:
+        - Layouts
+      parameters:
+        - name: layoutId
+          required: true
+          in: path
+          description: Layout id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
 components:
 
   securitySchemes:
@@ -952,17 +1105,26 @@ components:
       required:
         - title
         - html
+        - orderNumber
+        - layoutId
       properties:
         id:
           type: string
           format: uuid
           description: ID of page
+        orderNumber:
+          type: integer
+          description: Order number of page
         title:
           type: string
           description: Title of page
         html:
           type: string
           description: HTML of page
+        layoutId:
+          type: string
+          format: uuid
+          description: ID of layout
         properties:
           type: array
           description: Page properties
@@ -993,6 +1155,31 @@ components:
       enum:
         - TEXT
         - IMAGE_URL
+
+    Layout:
+      type: object
+      description: Layout of the page
+      required:
+        - name
+        - thumbnail
+        - html
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of Layout
+          readOnly: true
+        name:
+          type: string
+          description: Name of Layout
+        thumbnail:
+          type: string
+          description: Thumbnail of Layout
+        html:
+          type: string
+          description: HTML code of Layout
+        metadata:
+          $ref: "#/components/schemas/Metadata"
 
     DeviceSurveyStatus:
       type: string
