@@ -1074,6 +1074,7 @@ components:
         - title
         - html
         - orderNumber
+        - layoutId
       properties:
         id:
           type: string
