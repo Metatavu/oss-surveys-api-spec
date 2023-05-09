@@ -1104,7 +1104,6 @@ components:
       description: Page object
       required:
         - title
-        - html
         - orderNumber
         - layoutId
       properties:
@@ -1118,9 +1117,6 @@ components:
         title:
           type: string
           description: Title of page
-        html:
-          type: string
-          description: HTML of page
         layoutId:
           type: string
           format: uuid
@@ -1155,6 +1151,7 @@ components:
       enum:
         - TEXT
         - IMAGE_URL
+        - OPTIONS
 
     Layout:
       type: object
