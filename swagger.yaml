@@ -657,7 +657,7 @@ paths:
     get:
       operationId: findDeviceSurvey
       summary: Find a Device Survey.
-      description: Finds a Device Survey by id. Devices access this endpoint.
+      description: Finds a Device Survey by id.
       tags:
         - DeviceSurveys
       security:
@@ -1315,12 +1315,32 @@ components:
         id:
           type: string
           format: uuid
-          description: ID of survey
+          description: ID of device survey
           readOnly: true
         pages:
           type: array
           items:
             $ref: "#/components/schemas/DeviceSurveyPageData"
+        surveyId:
+          type: string
+          format: uuid
+          description: ID of Survey
+        deviceId:
+          type: string
+          format: uuid
+          description: ID of Device
+        status:
+          $ref: "#/components/schemas/DeviceSurveyStatus"
+        publishStartTime:
+          type: string
+          format: date-time
+          description: Publication start time
+        publishEndTime:
+          type: string
+          format: date-time
+          description: Publication end time
+        metadata:
+          $ref: "#/components/schemas/Metadata"
 
     DeviceSurveyPageData:
       type: object
