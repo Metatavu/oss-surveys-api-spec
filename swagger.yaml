@@ -660,8 +660,6 @@ paths:
       description: Finds a Device Survey by id.
       tags:
         - DeviceSurveys
-      security:
-        - deviceAuth: []
       parameters:
         - name: deviceId
           required: true
