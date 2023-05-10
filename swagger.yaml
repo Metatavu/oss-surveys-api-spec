@@ -951,6 +951,48 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/deviceData/{deviceId}/surveys/{surveyId}:
+    get:
+      operationId: findDeviceDataSurvey
+      summary: Finds device data survey
+      description: Endpoint for device to find a survey with all the data included
+      tags:
+        - DeviceData
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: surveyId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Survey data object for the given survey
+          content:
+            application/json:
+              schema:
+                 $ref: "#/components/schemas/DeviceSurveyData"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of surveys for this device
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
 
   securitySchemes:
