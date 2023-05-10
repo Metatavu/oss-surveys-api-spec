@@ -951,7 +951,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/deviceData/{deviceId}/surveys/{surveyId}:
+  /v1/deviceData/{deviceId}/surveys/{deviceSurveyId}:
     get:
       operationId: findDeviceDataSurvey
       summary: Finds device data survey
@@ -966,10 +966,10 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: surveyId
+        - name: deviceSurveyId
           required: true
           in: path
-          description: Device id
+          description: device survey id
           schema:
             type: string
             format: uuid
