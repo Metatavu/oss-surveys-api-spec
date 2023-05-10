@@ -376,6 +376,11 @@ paths:
           description: Max results. Defaults to 10
           schema:
             type: integer
+        - name: status
+          in: query
+          description: Status
+          schema:
+            $ref: "#/components/schemas/DeviceStatus"
       responses:
         "200":
           description: List of Devices
