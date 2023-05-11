@@ -1320,6 +1320,14 @@ components:
           format: uuid
           description: ID of device survey
           readOnly: true
+        title:
+          type: string
+          description: Title of survey
+          readOnly: true
+        timeout:
+          type: integer
+          format: int32
+          description: Timeout of returning to home page in seconds
         pages:
           type: array
           items:
@@ -1359,6 +1367,10 @@ components:
           type: string
           format: uuid
           description: ID of survey page
+          readOnly: true
+        pageNumber:
+          type: integer
+          description: Page number of survey page
           readOnly: true
         layoutHtml:
           type: string
