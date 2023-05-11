@@ -1324,24 +1324,30 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/DeviceSurveyPageData"
+          readOnly: true
         surveyId:
           type: string
           format: uuid
           description: ID of Survey
+          readOnly: true
         deviceId:
           type: string
           format: uuid
           description: ID of Device
+          readOnly: true
         status:
           $ref: "#/components/schemas/DeviceSurveyStatus"
+          readOnly: true
         publishStartTime:
           type: string
           format: date-time
           description: Publication start time
+          readOnly: true
         publishEndTime:
           type: string
           format: date-time
           description: Publication end time
+          readOnly: true
         metadata:
           $ref: "#/components/schemas/Metadata"
 
