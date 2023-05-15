@@ -1207,6 +1207,8 @@ components:
           description: Page properties
           items:
             $ref: "#/components/schemas/PageProperty"
+        question:
+          $ref: "#/components/schemas/PageQuestion"
         metadata:
           $ref: "#/components/schemas/Metadata"
 
@@ -1216,7 +1218,6 @@ components:
       required:
         - key
         - value
-        - type
       properties:
         key:
           type: string
@@ -1224,15 +1225,7 @@ components:
         value:
           type: string
           description: Value of property
-        type:
-          $ref: "#/components/schemas/PagePropertyType"
 
-    PagePropertyType:
-      type: string
-      enum:
-        - TEXT
-        - IMAGE_URL
-        - OPTIONS
 
     Layout:
       type: object
@@ -1256,6 +1249,11 @@ components:
         html:
           type: string
           description: HTML code of Layout
+        layoutVariables:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutVariable"
+          description: List of variables to be filled that this layout requires
         metadata:
           $ref: "#/components/schemas/Metadata"
 
@@ -1381,5 +1379,82 @@ components:
           description: Page properties
           items:
             $ref: "#/components/schemas/PageProperty"
+        layoutVariables:
+          type: array
+          description: Variables that the layout of this page supports
+          items:
+            $ref: "#/components/schemas/LayoutVariable"
+        question:
+          $ref: "#/components/schemas/PageQuestion"
         metadata:
           $ref: "#/components/schemas/Metadata"
+
+    LayoutVariable:
+      type: object
+      description: Variable of the layout
+      properties:
+        id:
+          description: identifier of the page question
+          type: string
+          format: uuid
+        type:
+          $ref: "#/components/schemas/LayoutVariableType"
+        locale:
+          $ref: "#/components/schemas/Locale"
+        key:
+          type: string
+          description: key of the layout variable (used in the layout HTML)
+
+    Locale:
+      type: string
+      enum:
+        - en
+        - fi
+
+    LayoutVariableType:
+      type: string
+      enum:
+        - TEXT
+        - IMAGE_URL
+
+    PageQuestion:
+      type: object
+      description: Question for the page
+      properties:
+        id:
+          description: identifier of the page question
+          type: string
+          format: uuid
+        question:
+          description: question text
+          type: string
+        type:
+          $ref: "#/components/schemas/PageQuestionType"
+        options:
+          type: array
+          description: possible answers to the question
+          items:
+            $ref: "#/components/schemas/PageQuestionOption"
+
+    PageQuestionType:
+      type: string
+      description: type of the answer required by the question
+      enum:
+        - SINGLE_SELECT
+        - MULTI_SELECT
+        - FREETEXT
+
+    PageQuestionOption:
+      type: object
+      description: Answer option to the question
+      properties:
+        id:
+          type: string
+          description: identifier of the page question option
+          format: uuid
+        questionOptionValue:
+          type: string
+          description: real value of the answer option
+
+
+          .
