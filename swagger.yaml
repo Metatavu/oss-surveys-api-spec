@@ -1221,7 +1221,7 @@ components:
       properties:
         key:
           type: string
-          description: Name of property
+          description: Property key
         value:
           type: string
           description: Value of property
@@ -1395,23 +1395,11 @@ components:
         - type
         - key
       properties:
-        id:
-          description: identifier of the page question
-          type: string
-          format: uuid
         type:
           $ref: "#/components/schemas/LayoutVariableType"
-        locale:
-          $ref: "#/components/schemas/Locale"
         key:
           type: string
           description: key of the layout variable (used in the layout HTML)
-
-    Locale:
-      type: string
-      enum:
-        - en
-        - fi
 
     LayoutVariableType:
       type: string
