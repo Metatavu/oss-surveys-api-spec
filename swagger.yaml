@@ -1411,7 +1411,6 @@ components:
       type: object
       description: Question for the page
       required:
-        - question
         - type
         - options
       properties:
@@ -1419,9 +1418,6 @@ components:
           description: identifier of the page question
           type: string
           format: uuid
-        question:
-          description: question text
-          type: string
         type:
           $ref: "#/components/schemas/PageQuestionType"
         options:
