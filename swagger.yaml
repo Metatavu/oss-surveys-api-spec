@@ -1443,6 +1443,7 @@ components:
       description: Answer option to the question
       required:
         - questionOptionValue
+        - orderNumber
       properties:
         id:
           type: string
@@ -1451,3 +1452,6 @@ components:
         questionOptionValue:
           type: string
           description: text value of the answer option
+        orderNumber:
+          type: integer
+          description: Order number of page question option
