@@ -996,6 +996,55 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/deviceData/{deviceId}/surveys/{deviceSurveyId}/pages/{pageId}/answers:
+    post:
+      operationId: Submit survey answer
+      summary: Submits page answer for the survey
+      description: Endpoint for the devices to send their responses to the survey pages
+      tags:
+        - DeviceData
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: device survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Layout"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Layout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Layout"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
 
   securitySchemes:
@@ -1389,6 +1438,21 @@ components:
         metadata:
           $ref: "#/components/schemas/Metadata"
 
+    DevicePageSurveyAnswer:
+      type: object
+      description: The answer that the device submits
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of survey page
+          readOnly: true
+        answer:
+          type: string
+          description: single ID, list of IDs or text response
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
     LayoutVariable:
       type: object
       description: Variable of the layout
@@ -1455,6 +1519,3 @@ components:
         questionOptionValue:
           type: string
           description: real value of the answer option
-
-
-          .
