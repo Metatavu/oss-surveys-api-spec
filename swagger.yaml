@@ -1263,14 +1263,14 @@ components:
 
     PageProperty:
       type: object
-      description: Page property object
+      description: Page property object, contains the data to be filled during the page rendering
       required:
         - key
         - value
       properties:
         key:
           type: string
-          description: Name of property
+          description: Property key
         value:
           type: string
           description: Value of property
@@ -1302,7 +1302,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LayoutVariable"
-          description: List of variables to be filled that this layout requires
+          description: List of variables to be filled by page properties that this layout requires
         metadata:
           $ref: "#/components/schemas/Metadata"
 
@@ -1452,28 +1452,18 @@ components:
           description: single ID, list of IDs or text response
         metadata:
           $ref: "#/components/schemas/Metadata"
-
     LayoutVariable:
       type: object
-      description: Variable of the layout
+      description: Variable of the layout that should be filled by Page Property
+      required:
+        - type
+        - key
       properties:
-        id:
-          description: identifier of the page question
-          type: string
-          format: uuid
         type:
           $ref: "#/components/schemas/LayoutVariableType"
-        locale:
-          $ref: "#/components/schemas/Locale"
         key:
           type: string
           description: key of the layout variable (used in the layout HTML)
-
-    Locale:
-      type: string
-      enum:
-        - en
-        - fi
 
     LayoutVariableType:
       type: string
@@ -1484,14 +1474,14 @@ components:
     PageQuestion:
       type: object
       description: Question for the page
+      required:
+        - type
+        - options
       properties:
         id:
           description: identifier of the page question
           type: string
           format: uuid
-        question:
-          description: question text
-          type: string
         type:
           $ref: "#/components/schemas/PageQuestionType"
         options:
@@ -1511,6 +1501,9 @@ components:
     PageQuestionOption:
       type: object
       description: Answer option to the question
+      required:
+        - questionOptionValue
+        - orderNumber
       properties:
         id:
           type: string
@@ -1518,4 +1511,7 @@ components:
           format: uuid
         questionOptionValue:
           type: string
-          description: real value of the answer option
+          description: text value of the answer option
+        orderNumber:
+          type: integer
+          description: Order number of page question option
