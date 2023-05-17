@@ -1275,7 +1275,6 @@ components:
           type: string
           description: Value of property
 
-
     Layout:
       type: object
       description: Layout of the page
@@ -1452,6 +1451,7 @@ components:
           description: single ID, list of IDs or text response
         metadata:
           $ref: "#/components/schemas/Metadata"
+
     LayoutVariable:
       type: object
       description: Variable of the layout that should be filled by Page Property
