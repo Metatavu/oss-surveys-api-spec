@@ -1187,6 +1187,7 @@ components:
         - title
         - orderNumber
         - layoutId
+        - nextButtonVisible
       properties:
         id:
           type: string
@@ -1202,6 +1203,9 @@ components:
           type: string
           format: uuid
           description: ID of layout
+        nextButtonVisible:
+          type: boolean
+          description: Whether the page has next button or not
         properties:
           type: array
           description: Page properties
