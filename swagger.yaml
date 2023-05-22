@@ -1029,16 +1029,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Layout"
+              $ref: "#/components/schemas/DevicePageSurveyAnswer"
         description: Payload
         required: true
       responses:
-        "200":
-          description: Created Layout
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Layout"
+        "202":
+          description: Device answer was submitted
         "default":
           description: Invalid request was sent to the server
           content:
