@@ -1153,6 +1153,15 @@ components:
         serialNumber:
           type: string
           description: Serial Number of Device requesting approval
+        name:
+          type: string
+          description: Name of the Device requesting approval. Added via management when approving the request and later added to the newly created Device.
+        description:
+          type: string
+          description: Description of the Device requesting approval. Added via management when approving the request and later added to the newly created Device.
+        location:
+          type: string
+          description: Location of the Device requesting approval. Added via management when approving the request and later added to the newly created Device.
         approvalStatus:
           $ref: "#/components/schemas/DeviceApprovalStatus"
         Metadata:
