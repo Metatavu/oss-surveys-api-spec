@@ -1582,6 +1582,7 @@ components:
         properties:
           type: array
           description: Page properties
+          readOnly: true
           items:
             $ref: "#/components/schemas/PageProperty"
         layoutVariables:
@@ -1591,6 +1592,10 @@ components:
             $ref: "#/components/schemas/LayoutVariable"
         question:
           $ref: "#/components/schemas/PageQuestion"
+        nextButtonVisible:
+          type: boolean
+          description: Whether the page has next button or not
+          readOnly: true
         metadata:
           $ref: "#/components/schemas/Metadata"
 
