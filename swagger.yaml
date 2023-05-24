@@ -1191,7 +1191,7 @@ paths:
 
   /v1/deviceData/{deviceId}/surveys/{deviceSurveyId}/pages/{pageId}/answers:
     post:
-      operationId: Submit survey answer
+      operationId: submitSurveyAnswer
       summary: Submits page answer for the survey
       description: Endpoint for the devices to send their responses to the survey pages
       tags:
@@ -1351,6 +1351,15 @@ components:
         serialNumber:
           type: string
           description: Serial Number of Device requesting approval
+        name:
+          type: string
+          description: Name of the Device requesting approval. Added via management when approving the request and later added to the newly created Device.
+        description:
+          type: string
+          description: Description of the Device requesting approval. Added via management when approving the request and later added to the newly created Device.
+        location:
+          type: string
+          description: Location of the Device requesting approval. Added via management when approving the request and later added to the newly created Device.
         approvalStatus:
           $ref: "#/components/schemas/DeviceApprovalStatus"
         Metadata:
@@ -1618,6 +1627,7 @@ components:
         properties:
           type: array
           description: Page properties
+          readOnly: true
           items:
             $ref: "#/components/schemas/PageProperty"
         layoutVariables:
@@ -1627,6 +1637,10 @@ components:
             $ref: "#/components/schemas/LayoutVariable"
         question:
           $ref: "#/components/schemas/PageQuestion"
+        nextButtonVisible:
+          type: boolean
+          description: Whether the page has next button or not
+          readOnly: true
         metadata:
           $ref: "#/components/schemas/Metadata"
 
