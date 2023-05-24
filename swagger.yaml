@@ -357,6 +357,123 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/surveys/{surveyId}/pages/{pageId}/answers:
+    get:
+      operationId: listSurveyPageAnswers
+      summary: Lists answers submitted for a page
+      description: Lists answers to this page submitted by various devices. Allowed only for managers.
+      tags:
+        - SurveyAnswers
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of answers to the page of the survey
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DevicePageSurveyAnswer"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of answers.
+
+  /v1/surveys/{surveyId}/pages/{pageId}/answers/{answerId}:
+    get:
+      operationId: findSurveyPageAnswer
+      summary: Finds survey page answer by id
+      description: Finds survey page answer by id. Allowed only for managers.
+      tags:
+        - SurveyAnswers
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+        - name: answerId
+          required: true
+          in: path
+          description: Answer id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: found answer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DevicePageSurveyAnswer"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteSurveyPageAnswer
+      summary: Delete a Survey page answer.
+      description: Deletes a survey page answer.
+      tags:
+        - SurveyAnswers
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+        - name: answerId
+          required: true
+          in: path
+          description: Answer id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /v1/fleet/devices:
     get:
@@ -1036,6 +1153,51 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/deviceData/{deviceId}/surveys/{deviceSurveyId}/pages/{pageId}/answers:
+    post:
+      operationId: submitSurveyAnswer
+      summary: Submits page answer for the survey
+      description: Endpoint for the devices to send their responses to the survey pages
+      tags:
+        - DeviceData
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: device survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DevicePageSurveyAnswer"
+        description: Payload
+        required: true
+      responses:
+        "202":
+          description: Device answer was submitted
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
 
   securitySchemes:
@@ -1429,6 +1591,7 @@ components:
         properties:
           type: array
           description: Page properties
+          readOnly: true
           items:
             $ref: "#/components/schemas/PageProperty"
         layoutVariables:
@@ -1438,6 +1601,29 @@ components:
             $ref: "#/components/schemas/LayoutVariable"
         question:
           $ref: "#/components/schemas/PageQuestion"
+        nextButtonVisible:
+          type: boolean
+          description: Whether the page has next button or not
+          readOnly: true
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    DevicePageSurveyAnswer:
+      type: object
+      description: The answer that the device submits
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the answer
+          readOnly: true
+        pageId:
+          type: string
+          format: uuid
+          description: ID of survey page
+        answer:
+          type: string
+          description: single ID, list of IDs or text response
         metadata:
           $ref: "#/components/schemas/Metadata"
 
