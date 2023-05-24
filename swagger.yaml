@@ -1155,7 +1155,7 @@ paths:
 
   /v1/deviceData/{deviceId}/surveys/{deviceSurveyId}/pages/{pageId}/answers:
     post:
-      operationId: Submit survey answer
+      operationId: submitSurveyAnswer
       summary: Submits page answer for the survey
       description: Endpoint for the devices to send their responses to the survey pages
       tags:
