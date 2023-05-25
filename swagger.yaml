@@ -1731,6 +1731,13 @@ components:
       type: object
       description: Device survey statistics object
       readOnly: true
+      required:
+        - deviceId
+        - surveyId
+        - deviceSurveyId
+        - totalAnswerCount
+        - averages
+        - questions
       properties:
         deviceId:
           type: string
@@ -1762,6 +1769,11 @@ components:
       type: object
       description: Survey question statistics object
       readOnly: true
+      required:
+        - pageId
+        - pageTitle
+        - questionType
+        - options
       properties:
         pageId:
           type: string
@@ -1783,6 +1795,9 @@ components:
       type: object
       description: Survey question option statistics object
       readOnly: true
+      required:
+          - answerCount
+          - questionOptionValue
       properties:
         answerCount:
           type: integer
@@ -1798,6 +1813,9 @@ components:
       type: object
       description: Device survey statistics object that contains average answer counts
       readOnly: true
+      required:
+          - hourly
+          - weekDays
       properties:
         hourly:
           description: Answer count averages for each hour (index 0 being at midnight GMT+0 and 23 last our of the day).
