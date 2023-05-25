@@ -922,6 +922,42 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/devices/{deviceId}/surveys/{deviceSurveyId}/statistics:
+    get:
+      operationId: getDeviceSurveyStatistics
+      summary: Returns device survey statistics
+      description: Returns device survey statistics
+      tags:
+        - DeviceSurveys
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: Device Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Device survey statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSurveyStatistics"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/layouts:
     get:
       operationId: listLayouts
@@ -1690,3 +1726,111 @@ components:
         orderNumber:
           type: integer
           description: Order number of page question option
+          
+    DeviceSurveyStatistics:
+      type: object
+      description: Device survey statistics object
+      readOnly: true
+      required:
+        - deviceId
+        - surveyId
+        - deviceSurveyId
+        - totalAnswerCount
+        - averages
+        - questions
+      properties:
+        deviceId:
+          type: string
+          format: uuid
+          readOnly: true
+        surveyId:
+          type: string
+          format: uuid
+          readOnly: true
+        deviceSurveyId:
+          type: string
+          format: uuid
+          readOnly: true
+        totalAnswerCount:
+          type: integer
+          format: int64
+          description: Total number of answers
+          readOnly: true
+        averages:
+          $ref: "#/components/schemas/DeviceSurveyStatisticsAverages"
+        questions:
+          type: array
+          description: List of statistics of all pages that contains questions 
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/DeviceSurveyQuestionStatistics"
+            
+    DeviceSurveyQuestionStatistics:
+      type: object
+      description: Survey question statistics object
+      readOnly: true
+      required:
+        - pageId
+        - pageTitle
+        - questionType
+        - options
+      properties:
+        pageId:
+          type: string
+          format: uuid
+          readOnly: true
+        pageTitle:
+          type: string
+          readOnly: true
+        questionType:
+          $ref: "#/components/schemas/PageQuestionType"
+        options:
+          type: array
+          description: Statistics for device survey question options in correct order. 
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/DeviceSurveyQuestionOptionStatistics"
+        
+    DeviceSurveyQuestionOptionStatistics:
+      type: object
+      description: Survey question option statistics object
+      readOnly: true
+      required:
+          - answerCount
+          - questionOptionValue
+      properties:
+        answerCount:
+          type: integer
+          format: int64
+          description: Number of answers with given option value
+          readOnly: true
+        questionOptionValue:
+          type: string
+          description: text value of the answer option
+          readOnly: true
+          
+    DeviceSurveyStatisticsAverages:
+      type: object
+      description: Device survey statistics object that contains average answer counts
+      readOnly: true
+      required:
+          - hourly
+          - weekDays
+      properties:
+        hourly:
+          description: Answer count averages for each hour (index 0 being at midnight GMT+0 and 23 last our of the day).
+          example: [12.45, 72.34, 398.13, 48.99, 110.52, 292.65, 476.88, 71.00, 245.56, 186.87, 385.77, 414.34, 128.55, 207.61, 333.29, 491.37, 357.19, 423.46, 100.01, 274.38, 39.67, 288.91, 411.72, 483.11]
+
+          type: array
+          readOnly: true
+          items:
+            type: number
+            format: double
+        weekDays:
+          description: Answer count averages for each week day (index 0 being Monday and 6 Sunday)
+          example: [123.45, 278.30, 399.99, 87.12, 462.55, 219.87, 356.98]
+          type: array
+          readOnly: true
+          items:
+            type: number
+            format: double
