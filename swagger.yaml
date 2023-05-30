@@ -526,7 +526,7 @@ paths:
       summary: Find a Device.
       description: Finds a Device by id.
       tags:
-          - Devices
+        - Devices
       parameters:
         - name: deviceId
           required: true
@@ -922,7 +922,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/devices/{deviceId}/surveys/{deviceSurveyId}/statistics:
+  /v1/devices/{deviceId}/surveys/{surveyId}/statistics:
     get:
       operationId: getDeviceSurveyStatistics
       summary: Returns device survey statistics
@@ -937,7 +937,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: deviceSurveyId
+        - name: surveyId
           required: true
           in: path
           description: Device Survey id
@@ -1175,7 +1175,7 @@ paths:
           content:
             application/json:
               schema:
-                 $ref: "#/components/schemas/DeviceSurveyData"
+                $ref: "#/components/schemas/DeviceSurveyData"
           headers:
             X-Total-Count:
               schema:
@@ -1542,15 +1542,15 @@ components:
         
         Devices send this regularly to indicate their status"
       required:
-          - deviceId
-          - status
+        - deviceId
+        - status
       properties:
-          deviceId:
-              type: string
-              format: uuid
-              description: ID of Device
-          status:
-              $ref: "#/components/schemas/DeviceStatus"
+        deviceId:
+          type: string
+          format: uuid
+          description: ID of Device
+        status:
+          $ref: "#/components/schemas/DeviceStatus"
 
     DeviceSurveysMessageAction:
       type: string
@@ -1726,7 +1726,7 @@ components:
         orderNumber:
           type: integer
           description: Order number of page question option
-          
+
     DeviceSurveyStatistics:
       type: object
       description: Device survey statistics object
@@ -1734,7 +1734,6 @@ components:
       required:
         - deviceId
         - surveyId
-        - deviceSurveyId
         - totalAnswerCount
         - averages
         - questions
@@ -1747,10 +1746,6 @@ components:
           type: string
           format: uuid
           readOnly: true
-        deviceSurveyId:
-          type: string
-          format: uuid
-          readOnly: true
         totalAnswerCount:
           type: integer
           format: int64
@@ -1760,11 +1755,11 @@ components:
           $ref: "#/components/schemas/DeviceSurveyStatisticsAverages"
         questions:
           type: array
-          description: List of statistics of all pages that contains questions 
+          description: List of statistics of all pages that contains questions
           readOnly: true
           items:
             $ref: "#/components/schemas/DeviceSurveyQuestionStatistics"
-            
+
     DeviceSurveyQuestionStatistics:
       type: object
       description: Survey question statistics object
@@ -1786,18 +1781,18 @@ components:
           $ref: "#/components/schemas/PageQuestionType"
         options:
           type: array
-          description: Statistics for device survey question options in correct order. 
+          description: Statistics for device survey question options in correct order.
           readOnly: true
           items:
             $ref: "#/components/schemas/DeviceSurveyQuestionOptionStatistics"
-        
+
     DeviceSurveyQuestionOptionStatistics:
       type: object
       description: Survey question option statistics object
       readOnly: true
       required:
-          - answerCount
-          - questionOptionValue
+        - answerCount
+        - questionOptionValue
       properties:
         answerCount:
           type: integer
@@ -1808,14 +1803,14 @@ components:
           type: string
           description: text value of the answer option
           readOnly: true
-          
+
     DeviceSurveyStatisticsAverages:
       type: object
       description: Device survey statistics object that contains average answer counts
       readOnly: true
       required:
-          - hourly
-          - weekDays
+        - hourly
+        - weekDays
       properties:
         hourly:
           description: Answer count averages for each hour (index 0 being at midnight GMT+0 and 23 last our of the day).
