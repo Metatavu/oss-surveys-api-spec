@@ -1517,7 +1517,7 @@ components:
       type: object
       description: |
         Device Survey Message object
-        
+
         Corresponding action is interpreted from the topic this message is sent to"
       required:
         - deviceSurveyId
@@ -1539,7 +1539,7 @@ components:
       type: object
       description: |
         Device Status Message object
-        
+
         Devices send this regularly to indicate their status"
       required:
         - deviceId
@@ -1806,15 +1806,15 @@ components:
 
     DeviceSurveyStatisticsAverages:
       type: object
-      description: Device survey statistics object that contains average answer counts
+      description: Device survey statistics object that contains answers percentage distribution
       readOnly: true
       required:
         - hourly
         - weekDays
       properties:
         hourly:
-          description: Answer count averages for each hour (index 0 being at midnight GMT+0 and 23 last our of the day).
-          example: [12.45, 72.34, 398.13, 48.99, 110.52, 292.65, 476.88, 71.00, 245.56, 186.87, 385.77, 414.34, 128.55, 207.61, 333.29, 491.37, 357.19, 423.46, 100.01, 274.38, 39.67, 288.91, 411.72, 483.11]
+          description: Answer count percentages for each hour (index 0 being at midnight GMT+0 and 23 last our of the day).
+          example: [5, 15, 10, 7, 8, 12, 6, 9, 6, 5, 4, 3, 5, 5, 7, 5, 8, 4, 2, 2, 2, 3, 4, 0]
 
           type: array
           readOnly: true
@@ -1822,8 +1822,8 @@ components:
             type: number
             format: double
         weekDays:
-          description: Answer count averages for each week day (index 0 being Monday and 6 Sunday)
-          example: [123.45, 278.30, 399.99, 87.12, 462.55, 219.87, 356.98]
+          description: Answer count percentages for each week day (index 0 being Monday and 6 Sunday)
+          example: [5.32, 12.00, 17.28, 3.75, 19.93, 9.46, 15.26]
           type: array
           readOnly: true
           items:
