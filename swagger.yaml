@@ -1382,6 +1382,7 @@ components:
         - surveyId
         - deviceId
         - status
+        - publishStartTime
       properties:
         id:
           type: string
@@ -1401,7 +1402,7 @@ components:
         publishStartTime:
           type: string
           format: date-time
-          description: Publication start time
+          description: Publication start time. Should be set to now if survey is published immediately.
         publishEndTime:
           type: string
           format: date-time
