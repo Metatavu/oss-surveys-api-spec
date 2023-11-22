@@ -1,0 +1,1832 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: OSS Surveys API
+
+security:
+  - bearerAuth: []
+
+paths:
+  /v1/system/ping:
+    get:
+      operationId: ping
+      summary: Replies with pong
+      description: Replies ping with pong
+      tags:
+        - System
+      responses:
+        "200":
+          description: Pong
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /v1/surveys:
+    get:
+      operationId: listSurveys
+      summary: List surveys.
+      description: Lists surveys.
+      tags:
+        - Surveys
+      parameters:
+        - name: firstResult
+          in: query
+          description: First result. Defaults to 0
+          schema:
+            type: integer
+        - name: maxResults
+          in: query
+          description: Max results. Defaults to 10
+          schema:
+            type: integer
+        - name: status
+          in: query
+          description: Filter Surveys by status
+          schema:
+            $ref: "#/components/schemas/SurveyStatus"
+      responses:
+        "200":
+          description: List of Surveys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Survey"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of Surveys with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createSurvey
+      summary: Create an Survey.
+      description: Creates a new Survey.
+      tags:
+        - Surveys
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Survey"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Survey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Survey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/surveys/{surveyId}:
+    get:
+      operationId: findSurvey
+      summary: Find a Survey.
+      description: Finds a Survey by id.
+      tags:
+        - Surveys
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Survey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Survey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateSurvey
+      summary: Update a Survey.
+      description: Updates a Survey
+      tags:
+        - Surveys
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Survey"
+        description: Payload
+        required: true
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Survey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Survey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteSurvey
+      summary: Delete a Survey.
+      description: Deletes a Survey.
+      tags:
+        - Surveys
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/surveys/{surveyId}/pages:
+    get:
+      operationId: listSurveyPages
+      summary: Lists all pages of a survey
+      description: Lists all pages of a survey
+      tags:
+        - Pages
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of pages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Page"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of pages
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createSurveyPage
+      summary: Creates a page for the survey
+      description: Creates a page for the survey
+      tags:
+        - Pages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Page"
+        description: Payload
+        required: true
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: created Page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/surveys/{surveyId}/pages/{pageId}:
+    get:
+      operationId: findSurveyPage
+      summary: Finds survey page by id
+      description: Finds survey page by id
+      tags:
+        - Pages
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: found page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateSurveyPage
+      summary: Updates a page
+      description: Updates a page
+      tags:
+        - Pages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Page"
+        description: Payload
+        required: true
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteSurveyPage
+      summary: Delete a Survey page.
+      description: Deletes a Survey page.
+      tags:
+        - Pages
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/surveys/{surveyId}/pages/{pageId}/answers:
+    get:
+      operationId: listSurveyPageAnswers
+      summary: Lists answers submitted for a page
+      description: Lists answers to this page submitted by various devices. Allowed only for managers.
+      tags:
+        - SurveyAnswers
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of answers to the page of the survey
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DevicePageSurveyAnswer"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of answers.
+
+  /v1/surveys/{surveyId}/pages/{pageId}/answers/{answerId}:
+    get:
+      operationId: findSurveyPageAnswer
+      summary: Finds survey page answer by id
+      description: Finds survey page answer by id. Allowed only for managers.
+      tags:
+        - SurveyAnswers
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+        - name: answerId
+          required: true
+          in: path
+          description: Answer id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: found answer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DevicePageSurveyAnswer"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteSurveyPageAnswer
+      summary: Delete a Survey page answer.
+      description: Deletes a survey page answer.
+      tags:
+        - SurveyAnswers
+      parameters:
+        - name: surveyId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Page id
+          schema:
+            type: string
+            format: uuid
+        - name: answerId
+          required: true
+          in: path
+          description: Answer id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/fleet/devices:
+    get:
+      operationId: listDevices
+      summary: List devices.
+      description: Lists devices.
+      tags:
+        - Devices
+      parameters:
+        - name: firstResult
+          in: query
+          description: First result. Defaults to 0
+          schema:
+            type: integer
+        - name: maxResults
+          in: query
+          description: Max results. Defaults to 10
+          schema:
+            type: integer
+        - name: status
+          in: query
+          description: Status
+          schema:
+            $ref: "#/components/schemas/DeviceStatus"
+      responses:
+        "200":
+          description: List of Devices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Device"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of Devices with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/fleet/devices/{deviceId}:
+    get:
+      operationId: findDevice
+      summary: Find a Device.
+      description: Finds a Device by id.
+      tags:
+        - Devices
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Device
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteDevice
+      summary: Deletes Device
+      description: Deletes Device
+      tags:
+        - Devices
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/fleet/devices/requests:
+    get:
+      operationId: listDeviceRequests
+      summary: List device requests.
+      description: Lists device requests.
+      tags:
+        - DeviceRequests
+      parameters:
+        - name: firstResult
+          in: query
+          description: First result. Defaults to 0
+          schema:
+            type: integer
+        - name: maxResults
+          in: query
+          description: Max results. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of Device Requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceRequest"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of Devices with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  /v1/fleet/devices/requests/{serialNumber}:
+    post:
+      operationId: createDeviceRequest
+      summary: Creates a Device Request
+      description: Creates a Device Request.
+      tags:
+        - DeviceRequests
+      parameters:
+        - name: serialNumber
+          required: true
+          in: path
+          description: Device serial number
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Created Device Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceRequest"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/fleet/devices/requests/{requestId}:
+    put:
+      operationId: updateDeviceRequest
+      summary: Updates Device Request
+      description: Updates Device Request.
+      tags:
+        - DeviceRequests
+      parameters:
+        - name: requestId
+          required: true
+          in: path
+          description: Device Request id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceRequest"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated device request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceRequest"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteDeviceRequest
+      summary: Deletes Device Request
+      description: Deletes Device Request
+      tags:
+        - DeviceRequests
+      parameters:
+        - name: requestId
+          required: true
+          in: path
+          description: Device Request id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/fleet/devices/requests/{requestId}/key:
+    put:
+      operationId: getDeviceKey
+      summary: Gets device key
+      description: Gets device key if device is approved.
+      tags:
+        - DeviceRequests
+      parameters:
+        - name: requestId
+          required: true
+          in: path
+          description: Device Request id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Device key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceKey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/devices/{deviceId}/surveys:
+    get:
+      operationId: listDeviceSurveys
+      summary: Lists Device Surveys
+      description: Lists Device Surveys.
+      tags:
+        - DeviceSurveys
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: firstResult
+          in: query
+          description: First result. Defaults to 0
+          schema:
+            type: integer
+        - name: maxResults
+          in: query
+          description: Max results. Defaults to 10
+          schema:
+            type: integer
+        - name: status
+          in: query
+          description: Status of DeviceSurvey
+          schema:
+            $ref: "#/components/schemas/DeviceSurveyStatus"
+      responses:
+        "200":
+          description: List of Device Surveys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceSurvey"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of Device Surveys with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createDeviceSurvey
+      summary: Create a Device Survey.
+      description: Creates a new DeviceSurvey.
+      tags:
+        - DeviceSurveys
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceSurvey"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created DeviceSurvey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSurvey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/devices/{deviceId}/surveys/{deviceSurveyId}:
+    get:
+      operationId: findDeviceSurvey
+      summary: Find a Device Survey.
+      description: Finds a Device Survey by id.
+      tags:
+        - DeviceSurveys
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: Device Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Survey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSurvey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateDeviceSurvey
+      summary: Update a Device Survey.
+      description: Updates a Device Survey
+      tags:
+        - DeviceSurveys
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceSurvey"
+        description: Payload
+        required: true
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: Device Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Survey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSurvey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteDeviceSurvey
+      summary: Delete a Device Survey.
+      description: Deletes a Device Survey.
+      tags:
+        - DeviceSurveys
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Survey id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: Device Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/devices/{deviceId}/surveys/{surveyId}/statistics:
+    get:
+      operationId: getDeviceSurveyStatistics
+      summary: Returns device survey statistics
+      description: Returns device survey statistics
+      tags:
+        - DeviceSurveys
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: surveyId
+          required: true
+          in: path
+          description: Device Survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Device survey statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSurveyStatistics"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/layouts:
+    get:
+      operationId: listLayouts
+      summary: List layouts.
+      description: Lists layouts.
+      tags:
+        - Layouts
+      parameters:
+        - name: firstResult
+          in: query
+          description: First result. Defaults to 0
+          schema:
+            type: integer
+        - name: maxResults
+          in: query
+          description: Max results. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of layouts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Layout"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of layouts
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createLayout
+      summary: Create a layout
+      description: Creates a new layout
+      tags:
+        - Layouts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Layout"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Layout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Layout"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/layouts/{layoutId}:
+    get:
+      operationId: findLayout
+      summary: Find a layout.
+      description: Finds a layout by id.
+      tags:
+        - Layouts
+      parameters:
+        - name: layoutId
+          required: true
+          in: path
+          description: Layout id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Layout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Layout"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateLayout
+      summary: Update a Layout.
+      description: Updates a Layout
+      tags:
+        - Layouts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Layout"
+        description: new Layout data
+        required: true
+      parameters:
+        - name: layoutId
+          required: true
+          in: path
+          description: Layout id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Layout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Layout"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteLayout
+      summary: Delete a Layout.
+      description: Deletes a Layout.
+      tags:
+        - Layouts
+      parameters:
+        - name: layoutId
+          required: true
+          in: path
+          description: Layout id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/deviceData/{deviceId}/surveys:
+    get:
+      operationId: listDeviceDataSurveys
+      summary: List device data surveys for this device.
+      description: List device data surveys for this device. Devices access this endpoint.
+      tags:
+        - DeviceData
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of survey data objects for the given device
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceSurveyData"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of surveys for this device
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/deviceData/{deviceId}/surveys/{deviceSurveyId}:
+    get:
+      operationId: findDeviceDataSurvey
+      summary: Finds device data survey
+      description: Endpoint for device to find a survey with all the data included
+      tags:
+        - DeviceData
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: device survey id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Survey data object for the given survey
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSurveyData"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of surveys for this device
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/deviceData/{deviceId}/surveys/{deviceSurveyId}/pages/{pageId}/answers:
+    post:
+      operationId: submitSurveyAnswer
+      summary: Submits page answer for the survey
+      description: Endpoint for the devices to send their responses to the survey pages
+      tags:
+        - DeviceData
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: deviceSurveyId
+          required: true
+          in: path
+          description: device survey id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DevicePageSurveyAnswer"
+        description: Payload
+        required: true
+      responses:
+        "202":
+          description: Device answer was submitted
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+    deviceAuth:
+      type: apiKey
+      in: header
+      name: X-DEVICE-KEY
+
+  schemas:
+    Error:
+      type: object
+      description: Error object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+
+    Metadata:
+      type: object
+      description: Metadata object
+      properties:
+        creatorId:
+          type: string
+          format: uuid
+          description: ID of creator
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Created date
+          readOnly: true
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Id of last modifier
+          readOnly: true
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Date modified
+          readOnly: true
+
+    Survey:
+      type: object
+      description: Survey object
+      required:
+        - title
+        - status
+        - timeout
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of survey
+          readOnly: true
+        title:
+          type: string
+          description: Name of survey
+        status:
+          $ref: "#/components/schemas/SurveyStatus"
+        description:
+          type: string
+          description: Description of survey
+        timeout:
+          type: integer
+          format: int32
+          description: Timeout of returning to home page in seconds
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Device:
+      type: object
+      description: Device object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of Device
+          readOnly: true
+        name:
+          type: string
+          description: Name of Device
+        serialNumber:
+          type: string
+          description: Serial Number of Device
+        description:
+          type: string
+          description: Description of Device
+        location:
+          type: string
+          description: Location of Device
+        deviceStatus:
+          $ref: "#/components/schemas/DeviceStatus"
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    DeviceRequest:
+      type: object
+      description: Device Request object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of Device Request
+        serialNumber:
+          type: string
+          description: Serial Number of Device requesting approval
+        name:
+          type: string
+          description: Name of the Device requesting approval. Added via management when approving the request and later added to the newly created Device.
+        description:
+          type: string
+          description: Description of the Device requesting approval. Added via management when approving the request and later added to the newly created Device.
+        location:
+          type: string
+          description: Location of the Device requesting approval. Added via management when approving the request and later added to the newly created Device.
+        approvalStatus:
+          $ref: "#/components/schemas/DeviceApprovalStatus"
+        Metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    DeviceKey:
+      type: object
+      description: Device key object
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          description: Device Key
+
+    DeviceSurvey:
+      type: object
+      description: Device Survey object
+      required:
+        - surveyId
+        - deviceId
+        - status
+        - publishStartTime
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of Device Survey
+          readOnly: true
+        surveyId:
+          type: string
+          format: uuid
+          description: ID of Survey
+        deviceId:
+          type: string
+          format: uuid
+          description: ID of Device
+        status:
+          $ref: "#/components/schemas/DeviceSurveyStatus"
+        publishStartTime:
+          type: string
+          format: date-time
+          description: Publication start time. Should be set to now if survey is published immediately.
+        publishEndTime:
+          type: string
+          format: date-time
+          description: Publication end time
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    DeviceApprovalStatus:
+      type: string
+      enum:
+        - PENDING
+        - APPROVED
+
+    DeviceStatus:
+      type: string
+      enum:
+        - ONLINE
+        - OFFLINE
+
+    SurveyStatus:
+      type: string
+      enum:
+        - DRAFT
+        - APPROVED
+
+    Page:
+      type: object
+      description: Page object
+      required:
+        - title
+        - orderNumber
+        - layoutId
+        - nextButtonVisible
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of page
+        orderNumber:
+          type: integer
+          description: Order number of page
+        title:
+          type: string
+          description: Title of page
+        layoutId:
+          type: string
+          format: uuid
+          description: ID of layout
+        nextButtonVisible:
+          type: boolean
+          description: Whether the page has next button or not
+        properties:
+          type: array
+          description: Page properties
+          items:
+            $ref: "#/components/schemas/PageProperty"
+        question:
+          $ref: "#/components/schemas/PageQuestion"
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    PageProperty:
+      type: object
+      description: Page property object, contains the data to be filled during the page rendering
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: string
+          description: Property key
+        value:
+          type: string
+          description: Value of property
+
+    Layout:
+      type: object
+      description: Layout of the page
+      required:
+        - name
+        - thumbnail
+        - html
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of Layout
+          readOnly: true
+        name:
+          type: string
+          description: Name of Layout
+        thumbnail:
+          type: string
+          description: Thumbnail of Layout
+        html:
+          type: string
+          description: HTML code of Layout
+        layoutVariables:
+          type: array
+          items:
+            $ref: "#/components/schemas/LayoutVariable"
+          description: List of variables to be filled by page properties that this layout requires
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    DeviceSurveyStatus:
+      type: string
+      enum:
+        - PUBLISHED
+        - SCHEDULED
+
+    DeviceSurveyMessage:
+      type: object
+      description: |
+        Device Survey Message object
+
+        Corresponding action is interpreted from the topic this message is sent to"
+      required:
+        - deviceSurveyId
+        - deviceId
+        - action
+      properties:
+        deviceSurveyId:
+          type: string
+          format: uuid
+          description: ID of Device Survey
+        deviceId:
+          type: string
+          format: uuid
+          description: ID of Device
+        action:
+          $ref: "#/components/schemas/DeviceSurveysMessageAction"
+
+    DeviceStatusMessage:
+      type: object
+      description: |
+        Device Status Message object
+
+        Devices send this regularly to indicate their status"
+      required:
+        - deviceId
+        - status
+      properties:
+        deviceId:
+          type: string
+          format: uuid
+          description: ID of Device
+        status:
+          $ref: "#/components/schemas/DeviceStatus"
+
+    DeviceSurveysMessageAction:
+      type: string
+      enum:
+        - CREATE
+        - UPDATE
+        - DELETE
+
+    DeviceSurveyData:
+      type: object
+      description: Survey object that is sent to devices and contains only necessary info for display
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of device survey
+          readOnly: true
+        title:
+          type: string
+          description: Title of survey
+          readOnly: true
+        timeout:
+          type: integer
+          format: int32
+          description: Timeout of returning to home page in seconds
+        pages:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeviceSurveyPageData"
+          readOnly: true
+        surveyId:
+          type: string
+          format: uuid
+          description: ID of Survey
+          readOnly: true
+        deviceId:
+          type: string
+          format: uuid
+          description: ID of Device
+          readOnly: true
+        status:
+          $ref: "#/components/schemas/DeviceSurveyStatus"
+          readOnly: true
+        publishStartTime:
+          type: string
+          format: date-time
+          description: Publication start time
+          readOnly: true
+        publishEndTime:
+          type: string
+          format: date-time
+          description: Publication end time
+          readOnly: true
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    DeviceSurveyPageData:
+      type: object
+      description: Survey page object that is sent to the device
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of survey page
+          readOnly: true
+        pageNumber:
+          type: integer
+          description: Page number of survey page
+          readOnly: true
+        layoutHtml:
+          type: string
+          description: Read-only version of page layout's HTML
+          readOnly: true
+        properties:
+          type: array
+          description: Page properties
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/PageProperty"
+        layoutVariables:
+          type: array
+          description: Variables that the layout of this page supports
+          items:
+            $ref: "#/components/schemas/LayoutVariable"
+        question:
+          $ref: "#/components/schemas/PageQuestion"
+        nextButtonVisible:
+          type: boolean
+          description: Whether the page has next button or not
+          readOnly: true
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    DevicePageSurveyAnswer:
+      type: object
+      description: The answer that the device submits
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the answer
+          readOnly: true
+        pageId:
+          type: string
+          format: uuid
+          description: ID of survey page
+        answer:
+          type: string
+          description: single ID, list of IDs or text response
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    LayoutVariable:
+      type: object
+      description: Variable of the layout that should be filled by Page Property
+      required:
+        - type
+        - key
+      properties:
+        type:
+          $ref: "#/components/schemas/LayoutVariableType"
+        key:
+          type: string
+          description: key of the layout variable (used in the layout HTML)
+
+    LayoutVariableType:
+      type: string
+      enum:
+        - TEXT
+        - IMAGE_URL
+
+    PageQuestion:
+      type: object
+      description: Question for the page
+      required:
+        - type
+        - options
+      properties:
+        id:
+          description: identifier of the page question
+          type: string
+          format: uuid
+        type:
+          $ref: "#/components/schemas/PageQuestionType"
+        options:
+          type: array
+          description: possible answers to the question
+          items:
+            $ref: "#/components/schemas/PageQuestionOption"
+
+    PageQuestionType:
+      type: string
+      description: type of the answer required by the question
+      enum:
+        - SINGLE_SELECT
+        - MULTI_SELECT
+        - FREETEXT
+
+    PageQuestionOption:
+      type: object
+      description: Answer option to the question
+      required:
+        - questionOptionValue
+        - orderNumber
+      properties:
+        id:
+          type: string
+          description: identifier of the page question option
+          format: uuid
+        questionOptionValue:
+          type: string
+          description: text value of the answer option
+        orderNumber:
+          type: integer
+          description: Order number of page question option
+
+    DeviceSurveyStatistics:
+      type: object
+      description: Device survey statistics object
+      readOnly: true
+      required:
+        - deviceId
+        - surveyId
+        - totalAnswerCount
+        - averages
+        - questions
+      properties:
+        deviceId:
+          type: string
+          format: uuid
+          readOnly: true
+        surveyId:
+          type: string
+          format: uuid
+          readOnly: true
+        totalAnswerCount:
+          type: integer
+          format: int64
+          description: Total number of answers
+          readOnly: true
+        averages:
+          $ref: "#/components/schemas/DeviceSurveyStatisticsAverages"
+        questions:
+          type: array
+          description: List of statistics of all pages that contains questions
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/DeviceSurveyQuestionStatistics"
+
+    DeviceSurveyQuestionStatistics:
+      type: object
+      description: Survey question statistics object
+      readOnly: true
+      required:
+        - pageId
+        - pageTitle
+        - questionType
+        - options
+      properties:
+        pageId:
+          type: string
+          format: uuid
+          readOnly: true
+        pageTitle:
+          type: string
+          readOnly: true
+        questionType:
+          $ref: "#/components/schemas/PageQuestionType"
+        options:
+          type: array
+          description: Statistics for device survey question options in correct order.
+          readOnly: true
+          items:
+            $ref: "#/components/schemas/DeviceSurveyQuestionOptionStatistics"
+
+    DeviceSurveyQuestionOptionStatistics:
+      type: object
+      description: Survey question option statistics object
+      readOnly: true
+      required:
+        - answerCount
+        - questionOptionValue
+      properties:
+        answerCount:
+          type: integer
+          format: int64
+          description: Number of answers with given option value
+          readOnly: true
+        questionOptionValue:
+          type: string
+          description: text value of the answer option
+          readOnly: true
+
+    DeviceSurveyStatisticsAverages:
+      type: object
+      description: Device survey statistics object that contains answers percentage distribution
+      readOnly: true
+      required:
+        - hourly
+        - weekDays
+      properties:
+        hourly:
+          description: Answer count percentages for each hour (index 0 being at midnight GMT+0 and 23 last our of the day).
+          example: [5, 15, 10, 7, 8, 12, 6, 9, 6, 5, 4, 3, 5, 5, 7, 5, 8, 4, 2, 2, 2, 3, 4, 0]
+
+          type: array
+          readOnly: true
+          items:
+            type: number
+            format: double
+        weekDays:
+          description: Answer count percentages for each week day (index 0 being Monday and 6 Sunday)
+          example: [5.32, 12.00, 17.28, 3.75, 19.93, 9.46, 15.26]
+          type: array
+          readOnly: true
+          items:
+            type: number
+            format: double
