@@ -1234,6 +1234,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /v1/mediaFiles:
+    get:
+      operationId: listMediaFiles
+      summary: Lists media files
+      description: Lists media files from S3 bucket from given path
+      tags:
+        - MediaLibrary
+      parameters:
+        - name: path
+          in: query
+          required: true
+          description: Path to list from S3 bucket
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of images
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MediaFile"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
 
   securitySchemes:
@@ -1248,6 +1278,17 @@ components:
       name: X-DEVICE-KEY
 
   schemas:
+    MediaFile:
+      type: object
+      description: Media file object
+      required:
+        - name
+        - path
+      properties:
+        name:
+          type: string
+        path:
+          type: string
     Error:
       type: object
       description: Error object
