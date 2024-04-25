@@ -1378,6 +1378,16 @@ components:
           description: Location of Device
         deviceStatus:
           $ref: "#/components/schemas/DeviceStatus"
+        versionCode:
+          type: integer
+          format: int64
+          description: Version code of the device
+          readOnly: true
+        unsentAnswersCount:
+          type: integer
+          format: int64
+          description: Number of unsent answers in the device
+          readOnly: true
         metadata:
           $ref: "#/components/schemas/Metadata"
 
@@ -1593,6 +1603,14 @@ components:
           description: ID of Device
         status:
           $ref: "#/components/schemas/DeviceStatus"
+        versionCode:
+          type: integer
+          format: int64
+          description: Version code of the device
+        unsentAnswersCount:
+          type: integer
+          format: int64
+          description: Number of unsent answers in the device
 
     DeviceSurveysMessageAction:
       type: string
