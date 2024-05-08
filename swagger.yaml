@@ -1713,13 +1713,23 @@ components:
           format: uuid
           description: ID of the answer
           readOnly: true
+        answer:
+          type: string
+          description: single ID, list of IDs or text response
         pageId:
           type: string
           format: uuid
           description: ID of survey page
-        answer:
-          type: string
-          description: single ID, list of IDs or text response
+        deviceAnswerId:
+          type: integer
+          format: int64
+          description: |
+            ID of the answer in the device database. 
+            
+            This field along with pageId and requesting deviceId forms a unique key for the answer. 
+            If the server receives an answer with the same key, it will discard the answer as duplicate.
+            
+            The field is write-only and will not be returned in the response.
         metadata:
           $ref: "#/components/schemas/Metadata"
 
