@@ -1250,13 +1250,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: pageId
-          required: true
-          in: path
-          description: Device id
-          schema:
-            type: string
-            format: uuid
       requestBody:
         content:
           application/json:
