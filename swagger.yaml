@@ -1235,6 +1235,45 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v2/deviceData/{deviceId}/answers:
+    post:
+      operationId: submitSurveyAnswerV2
+      summary: Submits page answer for the survey without relation to the device survey
+      description: Endpoint for the devices to send their responses to the survey pages without relation to the device survey
+      tags:
+        - DeviceData
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: pageId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DevicePageSurveyAnswer"
+        description: Payload
+        required: true
+      responses:
+        "202":
+          description: Device answer was submitted
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/mediaFiles:
     get:
       operationId: listMediaFiles
