@@ -1192,8 +1192,11 @@ paths:
   /v1/deviceData/{deviceId}/surveys/{deviceSurveyId}/pages/{pageId}/answers:
     post:
       operationId: submitSurveyAnswer
+      deprecated: true
       summary: Submits page answer for the survey
-      description: Endpoint for the devices to send their responses to the survey pages
+      description: |
+        This endpoint is deprecated and all future development should be done using the v2 endpoint.
+        Endpoint for the devices to send their responses to the survey pages
       tags:
         - DeviceData
       parameters:
