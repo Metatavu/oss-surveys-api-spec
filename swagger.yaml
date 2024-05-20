@@ -1769,7 +1769,7 @@ components:
           type: integer
           format: int64
           description: |
-            Timestamp of the answers as epoch millis.
+            Timestamp of the answers as epoch seconds.
 
             This field will be submitted by the device to indicate the time when the answer was given if the initial submission of the answer has failed.
             Otherwise the server will handle the timestamping.
