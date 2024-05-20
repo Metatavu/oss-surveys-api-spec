@@ -1766,10 +1766,10 @@ components:
 
             The field is write-only and will not be returned in the response.
         timestamp:
-          type: integer
-          format: int64
+          type: string
+          format: date-time
           description: |
-            Timestamp of the answers as epoch seconds.
+            Timestamp of the answers as ISO date.
 
             This field will be submitted by the device to indicate the time when the answer was given if the initial submission of the answer has failed.
             Otherwise the server will handle the timestamping.
