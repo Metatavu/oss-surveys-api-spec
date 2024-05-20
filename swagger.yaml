@@ -1253,6 +1253,14 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: overrideCreatedAt
+          required: false
+          in: query
+          description: |
+            Overrides createdAt field the post time. This feature can be used for sending postponed reply submissions
+          schema:
+            type: string
+            format: date-time
       requestBody:
         content:
           application/json:
@@ -1759,11 +1767,11 @@ components:
           type: integer
           format: int64
           description: |
-            ID of the answer in the device database. 
-            
+            ID of the answer in the device database.
+
             This field along with pageId and requesting deviceId forms a unique key for the answer. 
             If the server receives an answer with the same key, it will discard the answer as duplicate.
-            
+
             The field is write-only and will not be returned in the response.
         metadata:
           $ref: "#/components/schemas/Metadata"
