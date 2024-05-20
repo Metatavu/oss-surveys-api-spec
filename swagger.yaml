@@ -1759,12 +1759,20 @@ components:
           type: integer
           format: int64
           description: |
-            ID of the answer in the device database. 
-            
+            ID of the answer in the device database.
+
             This field along with pageId and requesting deviceId forms a unique key for the answer. 
             If the server receives an answer with the same key, it will discard the answer as duplicate.
-            
+
             The field is write-only and will not be returned in the response.
+        timestamp:
+          type: integer
+          format: int64
+          description: |
+            Timestamp of the answers as epoch millis.
+
+            This field will be submitted by the device to indicate the time when the answer was given if the initial submission of the answer has failed.
+            Otherwise the server will handle the timestamping.
         metadata:
           $ref: "#/components/schemas/Metadata"
 
