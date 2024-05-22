@@ -1192,8 +1192,11 @@ paths:
   /v1/deviceData/{deviceId}/surveys/{deviceSurveyId}/pages/{pageId}/answers:
     post:
       operationId: submitSurveyAnswer
+      deprecated: true
       summary: Submits page answer for the survey
-      description: Endpoint for the devices to send their responses to the survey pages
+      description: |
+        This endpoint is deprecated and all future development should be done using the v2 endpoint.
+        Endpoint for the devices to send their responses to the survey pages
       tags:
         - DeviceData
       parameters:
@@ -1234,6 +1237,76 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /v2/deviceData/{deviceId}/answers:
+    post:
+      operationId: submitSurveyAnswerV2
+      summary: Submits page answer for the survey without relation to the device survey
+      description: Endpoint for the devices to send their responses to the survey pages without relation to the device survey
+      tags:
+        - DeviceData
+      parameters:
+        - name: deviceId
+          required: true
+          in: path
+          description: Device id
+          schema:
+            type: string
+            format: uuid
+        - name: overrideCreatedAt
+          required: false
+          in: query
+          description: |
+            Overrides createdAt field the post time. This feature can be used for sending postponed reply submissions
+          schema:
+            type: string
+            format: date-time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DevicePageSurveyAnswer"
+        description: Payload
+        required: true
+      responses:
+        "202":
+          description: Device answer was submitted
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/mediaFiles:
+    get:
+      operationId: listMediaFiles
+      summary: Lists media files
+      description: Lists media files from S3 bucket from given path
+      tags:
+        - MediaLibrary
+      parameters:
+        - name: path
+          in: query
+          required: true
+          description: Path to list from S3 bucket
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of images
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MediaFile"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
 
   securitySchemes:
@@ -1248,6 +1321,17 @@ components:
       name: X-DEVICE-KEY
 
   schemas:
+    MediaFile:
+      type: object
+      description: Media file object
+      required:
+        - name
+        - path
+      properties:
+        name:
+          type: string
+        path:
+          type: string
     Error:
       type: object
       description: Error object
@@ -1337,6 +1421,16 @@ components:
           description: Location of Device
         deviceStatus:
           $ref: "#/components/schemas/DeviceStatus"
+        versionCode:
+          type: integer
+          format: int64
+          description: Version code of the device
+          readOnly: true
+        unsentAnswersCount:
+          type: integer
+          format: int64
+          description: Number of unsent answers in the device
+          readOnly: true
         metadata:
           $ref: "#/components/schemas/Metadata"
 
@@ -1552,6 +1646,14 @@ components:
           description: ID of Device
         status:
           $ref: "#/components/schemas/DeviceStatus"
+        versionCode:
+          type: integer
+          format: int64
+          description: Version code of the device
+        unsentAnswersCount:
+          type: integer
+          format: int64
+          description: Number of unsent answers in the device
 
     DeviceSurveysMessageAction:
       type: string
@@ -1654,13 +1756,23 @@ components:
           format: uuid
           description: ID of the answer
           readOnly: true
+        answer:
+          type: string
+          description: single ID, list of IDs or text response
         pageId:
           type: string
           format: uuid
           description: ID of survey page
-        answer:
-          type: string
-          description: single ID, list of IDs or text response
+        deviceAnswerId:
+          type: integer
+          format: int64
+          description: |
+            ID of the answer in the device database.
+
+            This field along with pageId and requesting deviceId forms a unique key for the answer. 
+            If the server receives an answer with the same key, it will discard the answer as duplicate.
+
+            The field is write-only and will not be returned in the response.
         metadata:
           $ref: "#/components/schemas/Metadata"
 
